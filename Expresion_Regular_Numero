@@ -1,0 +1,1 @@
+SELECT phone1 FROM phones WHERE NOT phone1 REGEXP '^[+]56[9|2][0-9]{8}$';
