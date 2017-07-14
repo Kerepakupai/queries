@@ -1,0 +1,42 @@
+ SELECT
+                    competitor_name,
+                    YEAR AS `year`,
+                    frecuency_value AS month_value,
+                    CASE frecuency_value
+                WHEN 1 THEN
+                    'Enero'
+                WHEN 2 THEN
+                    'Febrero'
+                WHEN 3 THEN
+                    'Marzo'
+                WHEN 4 THEN
+                    'Abril'
+                WHEN 5 THEN
+                    'Mayo'
+                WHEN 6 THEN
+                    'Junio'
+                WHEN 7 THEN
+                    'Julio'
+                WHEN 8 THEN
+                    'Agosto'
+                WHEN 9 THEN
+                    'Septiembre'
+                WHEN 10 THEN
+                    'Octubre'
+                WHEN 11 THEN
+                    'Noviembre'
+                WHEN 12 THEN
+                    'Diciembre'
+                ELSE
+                    NULL
+                END AS month_name,
+                 indicator AS percentage
+                FROM
+                    kpi_gnm_competitor_ranking
+                WHERE
+                    frecuency_type = 'Monthly'
+                AND STATUS = 1
+                AND show_indicator = 1
+                ORDER BY
+                    `year` ASC,
+                    frecuency_value ASC");
