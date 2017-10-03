@@ -1,0 +1,264 @@
+CREATE FUNCTION blueisocial.sla2(datetime1 DATETIME, datetime2 DATETIME)
+  RETURNS INT
+  BEGIN
+  DELIMITER $$
+CREATE DEFINER=`blueisocial`@`%` FUNCTION `sla2`(datetime1 datetime, datetime2 datetime) RETURNS int(11)
+BEGIN
+  declare minutes int;
+	declare seconds int;
+  declare date1 date;
+  declare date2 date;
+  declare days int;
+  declare holidays int;
+  declare holidays_min int;
+  declare weekend_min int;
+  declare weekend int;
+  declare substr int;
+  declare total int;
+  
+  /*calcular minutos y dias entre 2 fechas*/
+  set seconds = (select TIMESTAMPDIFF(SECOND, datetime1, datetime2));
+  set days = (select DATEDIFF(datetime2, datetime1));
+
+	set minutes = CEILING(seconds/60);
+	-- return minutes;
+    
+  /*retornar minutos si fecha coincide*/
+  IF days=0 THEN
+   return minutes;DELIMITER $$
+CREATE DEFINER=`blueisocial`@`%` FUNCTION `sla`(datetime1 datetime, datetime2 datetime) RETURNS int(11)
+BEGIN
+  declare minutes int;
+	declare seconds int;
+  declare date1 date;
+  declare date2 date;
+  declare days int;
+  declare holidays int;
+  declare holidays_min int;
+  declare weekend_min int;
+  declare weekend int;
+  declare substr int;
+  declare total int;
+  
+  /*calcular minutos y dias entre 2 fechas*/
+  set seconds = (select TIMESTAMPDIFF(SECOND, datetime1, datetime2));
+  set days = (select DATEDIFF(datetime2, datetime1));
+
+	set minutes = CEILING(seconds/60);
+	-- return minutes;
+    
+  /*retornar minutos si fecha coincide*/
+  IF days=0 THEN
+   return minutes;
+  END IF;
+
+  IF days>1 THEN
+   set days = days+1;
+  END IF;
+  
+  /*descontar feriados si fechas no coinciden*/
+  set date1 = DATE(datetime1);
+  set date2 = DATE(datetime2);
+  set holidays = (SELECT count(*) FROM `global_holidays` WHERE date between date1 and date2);
+  set holidays_min = holidays*1440;
+
+  /*descontar fines de semana si fechas no coinciden*/
+  set weekend = (select workdaydiff(datetime2, datetime1));
+  if(days>weekend) then
+  	set weekend = days-weekend;
+  else
+  	set weekend = 0;
+  end if;
+  set weekend_min = weekend*1440;
+  
+  /*descontar fines de semana, feriados y hora extra*/
+  set total = minutes-(holidays_min+weekend_min);
+  set substr = ROUND(total/1440)*900;
+  set total = total-substr;
+  return total;
+END$$
+DELIMITER ;
+DELIMITER $$
+CREATE DEFINER=`blueisocial`@`%` FUNCTION `sla`(datetime1 datetime, datetime2 datetime) RETURNS int(11)
+BEGIN
+  declare minutes int;
+	declare seconds int;
+  declare date1 date;
+  declare date2 date;
+  declare days int;
+  declare holidays int;
+  declare holidays_min int;
+  declare weekend_min int;
+  declare weekend int;
+  declare substr int;
+  declare total int;
+  
+  /*calcular minutos y dias entre 2 fechas*/
+  set seconds = (select TIMESTAMPDIFF(SECOND, datetime1, datetime2));
+  set days = (select DATEDIFF(datetime2, datetime1));
+
+	set minutes = CEILING(seconds/60);
+	-- return minutes;
+    
+  /*retornar minutos si fecha coincide*/
+  IF days=0 THEN
+   return minutes;
+  END IF;
+
+  IF days>1 THEN
+   set days = days+1;
+  END IF;
+  
+  /*descontar feriados si fechas no coinciden*/
+  set date1 = DATE(datetime1);
+  set date2 = DATE(datetime2);
+  set holidays = (SELECT count(*) FROM `global_holidays` WHERE date between date1 and date2);
+  set holidays_min = holidays*1440;
+
+  /*descontar fines de semana si fechas no coinciden*/
+  set weekend = (select workdaydiff(datetime2, datetime1));
+  if(days>weekend) then
+  	set weekend = days-weekend;
+  else
+  	set weekend = 0;
+  end if;
+  set weekend_min = weekend*1440;
+  
+  /*descontar fines de semana, feriados y hora extra*/
+  set total = minutes-(holidays_min+weekend_min);
+  set substr = ROUND(total/1440)*900;
+  set total = total-substr;
+  return total;
+END$$
+DELIMITER ;
+DELIMITER $$
+CREATE DEFINER=`blueisocial`@`%` FUNCTION `sla2`(datetime1 datetime, datetime2 datetime) RETURNS int(11)
+BEGIN
+  declare minutes int;
+	declare seconds int;
+  declare date1 date;
+  declare date2 date;
+  declare days int;
+  declare holidays int;
+  declare holidays_min int;
+  declare weekend_min int;
+  declare weekend int;
+  declare substr int;
+  declare total int;
+  
+  /*calcular minutos y dias entre 2 fechas*/
+  set seconds = (select TIMESTAMPDIFF(SECOND, datetime1, datetime2));
+  set days = (select DATEDIFF(datetime2, datetime1));
+
+	set minutes = CEILING(seconds/60);
+	-- return minutes;
+    
+  /*retornar minutos si fecha coincide*/
+  IF days=0 THEN
+   return minutes;
+  END IF;
+
+  IF days>1 THEN
+   set days = days+1;
+  END IF;
+  
+  /*descontar feriados si fechas no coinciden*/
+  set date1 = DATE(datetime1);
+  set date2 = DATE(datetime2);
+  set holidays = (SELECT count(*) FROM `global_holidays` WHERE date between date1 and date2 and status = 1);
+  set holidays_min = holidays*1440;
+
+  /*descontar fines de semana si fechas no coinciden*/
+  set weekend = (select workdaydiff(datetime2, datetime1));
+  if(days>weekend) then
+  	set weekend = days-weekend;
+  else
+  	set weekend = 0;
+  end if;
+  set weekend_min = weekend*1440;
+  
+  /*descontar fines de semana, feriados y hora extra*/
+  set total = minutes-(holidays_min+weekend_min);
+  set substr = ROUND(total/1440)*900;
+  set total = total-substr;
+  return total;
+END$$
+DELIMITER ;
+
+  END IF;
+
+  IF days>1 THEN
+   set days = days+1;
+  END IF;
+  
+  /*descontar feriados si fechas no coinciden*/
+  set date1 = DATE(datetime1);
+  set date2 = DATE(datetime2);
+  set holidays = (SELECT count(*) FROM `global_holidays` WHERE date between date1 and date2 and status = 1);
+  set holidays_min = holidays*1440;
+
+  /*descontar fines de semana si fechas no coinciden*/
+  set weekend = (select workdaydiff(datetime2, datetime1));
+  if(days>weekend) then
+  	set weekend = days-weekend;
+  else
+  	set weekend = 0;
+  end if;
+  set weekend_min = weekend*1440;
+  
+  /*descontar fines de semana, feriados y hora extra*/
+  set total = minutes-(holidays_min+weekend_min);
+  set substr = ROUND(total/1440)*900;
+  set total = total-substr;
+  return total;
+END$$
+DELIMITER ;
+declare minutes int;
+  declare seconds int;
+  declare date1 date;
+  declare date2 date;
+  declare days int;
+  declare holidays int;
+  declare holidays_min int;
+  declare weekend_min int;
+  declare weekend int;
+  declare substr int;
+  declare total int;
+
+  /*calcular minutos y dias entre 2 fechas*/
+  set seconds = (select TIMESTAMPDIFF(SECOND, datetime1, datetime2));
+  set days = (select DATEDIFF(datetime2, datetime1));
+
+	set minutes = CEILING(seconds/60);
+	-- return minutes;
+
+  /*retornar minutos si fecha coincide*/
+  IF days=0 THEN
+   return minutes;
+  END IF;
+
+  IF days>1 THEN
+   set days = days+1;
+  END IF;
+
+  /*descontar feriados si fechas no coinciden*/
+  set date1 = DATE(datetime1);
+  set date2 = DATE(datetime2);
+  set holidays = (SELECT count(*) FROM `global_holidays` WHERE date between date1 and date2 AND status = 1);
+  set holidays_min = holidays*1440;
+
+  /*descontar fines de semana si fechas no coinciden*/
+  set weekend = (select workdaydiff(datetime2, datetime1));
+  if(days>weekend) then
+  	set weekend = days-weekend;
+  else
+  	set weekend = 0;
+  end if;
+  set weekend_min = weekend*1440;
+
+  /*descontar fines de semana, feriados y hora extra*/
+  set total = minutes-(holidays_min+weekend_min);
+  set substr = ROUND(total/1440)*900;
+  set total = total-substr;
+  return total;
+END;
